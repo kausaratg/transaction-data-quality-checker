@@ -171,3 +171,10 @@ This project combines data preparation with application development:
 - building reusable Python logic
 - communicating results through a usable web interface.
 
+## Home Page
+![Home page](images/image1.png)
+
+## Report Page
+![Home page](images/image2.png)
+
+
