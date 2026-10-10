@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quality Report | TransactionCheck</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --background: #fcfaf9;
+            --surface: #ffffff;
+            --text: #241c28;
+            --muted: #716b78;
+            --border: #e7dfdb;
+            --primary: #c25d20;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+            padding: 22px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.7px;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #2b1930;
+            color: #f47b24;
+        }
+
+        .header-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 48px 24px;
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 44px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin: 12px 0;
+        }
+
+        .source-file {
+            color: var(--muted);
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 24px 0 32px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(118, 57, 20, 0.15);
+        }
+
+        .button:hover {
+            background: #f7f2ee;
+        }
+
+        .button.primary:hover {
+            background: #a94d19;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        .table-wrapper:focus-visible {
+            outline: 3px solid #efad7f;
+            outline-offset: 4px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .metric,
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(52, 33, 23, 0.04);
+        }
+
+        .metric {
+            padding: 24px;
+        }
+
+        .metric p {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 0 0 8px;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 36px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .metric.passed strong {
+            color: #276749;
+        }
+
+        .metric.review strong {
+            color: var(--primary);
+        }
+
+        .card {
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            margin: 0 0 12px;
+        }
+
+        .description {
+            color: var(--muted);
+            font-size: 14px;
+            margin: 0 0 20px;
+        }
+
+        .processing-list {
+            padding-left: 22px;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .processing-list li {
+            padding-left: 6px;
+            margin-bottom: 12px;
+        }
+
+        .processing-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .processing-list li::marker {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid var(--border);
+            overflow-wrap: anywhere;
+        }
+
+        th {
+            background: #f7f2ee;
+            color: #574b44;
+            font-weight: 600;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .review-table tbody tr {
+            background: #fff7f5;
+        }
+
+        .review-table tbody tr:hover {
+            background: #ffefea;
+        }
+
+        .review-table td:last-child {
+            color: #a32035;
+        }
+
+        .empty-message {
+            background: #f0f8f3;
+            color: #276749;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 32px;
+        }
+
+        @media (max-width: 650px) {
+            main {
+                padding: 32px 16px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .metric,
+            .card {
+                padding: 20px;
+            }
+
+            .header-label {
+                display: none;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            header,
+            .actions,
+            footer {
+                display: none;
+            }
+
+            main {
+                max-width: none;
+                padding: 0;
+            }
+
+            .metric,
+            .card {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .metric {
+                padding: 12px;
+                break-inside: avoid;
+            }
+
+            .metric strong {
+                font-size: 26px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .table-wrapper {
+                overflow: visible;
+                border-radius: 0;
+            }
+
+            table {
+                table-layout: fixed;
+                font-size: 9px;
+            }
+
+            th,
+            td {
+                padding: 6px;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tr {
+                break-inside: avoid;
+            }
+
+            h2 {
+                break-after: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <a class="brand" href="{% url 'upload_transactions' %}">
+                <span class="brand-icon" aria-hidden="true">✓</span>
+                TransactionCheck
+            </a>
+
+            <span class="header-label">Data quality report</span>
+        </div>
+    </header>
+
+    <main>
+        <span class="eyebrow">Your results</span>
+
+        <h1>Transaction data quality report</h1>
+
+        <p class="source-file">
+            <strong>Source file:</strong> {{ filename }}
+        </p>
+
+        <nav class="actions" aria-label="Report actions">
+            <a
+                class="button primary"
+                href="data:text/csv;base64,{{ all_csv }}"
+                download="checked_transactions.csv"
+            >
+                Download checked CSV ↓
+            </a>
+
+            <button
+                class="button"
+                type="button"
+                onclick="window.print()"
+            >
+                Print / Save as PDF
+            </button>
+
+            <a
+                class="button"
+                href="{% url 'upload_transactions' %}"
+            >
+                Check another file
+            </a>
+        </nav>
+
+        <section class="metrics" aria-label="Validation totals">
+            <div class="metric">
+                <p>Total records</p>
+                <strong>{{ summary.total_records }}</strong>
+            </div>
+
+            <div class="metric passed">
+                <p>Passed all checks</p>
+                <strong>{{ summary.passed_records }}</strong>
+            </div>
+
+            <div class="metric review">
+                <p>Need review</p>
+                <strong>{{ summary.review_records }}</strong>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Processing performed</h2>
+
+            <p class="description">
+                All records were retained in the downloadable CSV.
+                Each record includes its validation status and
+                an explanation of any issues found.
+            </p>
+
+            <ol class="processing-list">
+                <li>
+                    Recognised status values were standardised to
+                    <strong>Success, Failed, or Pending</strong>,
+                    ignoring capitalisation and surrounding spaces.
+                </li>
+
+                <li>
+                    Valid day/month/year dates were formatted as
+                    <strong>DD/MM/YYYY</strong>.
+                    Invalid or missing dates were flagged.
+                </li>
+
+                <li>
+                    Required fields were checked for missing values.
+                </li>
+
+                <li>
+                    Transaction IDs were checked for duplicates.
+                    All occurrences of repeated IDs were flagged.
+                </li>
+
+                <li>
+                    Amounts were checked for numeric, finite values
+                    greater than zero.
+                </li>
+
+                <li>
+                    Every record was labelled
+                    <strong>Passed</strong> or
+                    <strong>Needs review</strong>.
+                </li>
+            </ol>
+        </section>
+
+        <section class="card">
+            <h2>Issues found</h2>
+
+            <p class="description">
+                One record can have several issues, so the issue
+                counts may exceed the number of records needing review.
+            </p>
+
+            {% if summary.issue_counts %}
+                <div
+                    class="table-wrapper"
+                    role="region"
+                    aria-label="Issue counts"
+                    tabindex="0"
+                >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Issue</th>
+                                <th scope="col">Affected records</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for issue, count in summary.issue_counts.items %}
+                                <tr>
+                                    <td>{{ issue }}</td>
+                                    <td>{{ count }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-message">
+                    No issues were found by the configured checks.
+                </p>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <h2>Records needing review</h2>
+
+            <p class="description">
+                These records require attention. Their unresolved
+                values remain available for inspection, alongside
+                any standardisation already performed.
+            </p>
+
+            {% if review_rows %}
+                <div
+                    class="table-wrapper"
+                    role="region"
+                    aria-label="Records needing review"
+                    tabindex="0"
+                >
+                    <table class="review-table">
+                        <thead>
+                            <tr>
+                                {% for column in review_columns %}
+                                    <th scope="col">{{ column }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for row in review_rows %}
+                                <tr>
+                                    {% for value in row %}
+                                        <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-message">
+                    All records passed the configured checks.
+                </p>
+            {% endif %}
+        </section>
+
+        <footer>
+            Personal portfolio project · Demonstrated using synthetic data
+        </footer>
+    </main>
+</body>
+</html>
